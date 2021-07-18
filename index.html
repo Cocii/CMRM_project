@@ -1,0 +1,44 @@
+<!doctype html>
+<link href="CMRM_Project.css" rel="stylesheet" type="text/css" media="screen">
+<script src="script/CMRM_Project.js"></script>
+<div class="keyboard hidden">
+	<div class="top">
+		<div class="display">
+			<canvas class="waveform"></canvas>
+		</div>
+		<div class="type">
+			<div class="selector top"></div>
+			<div data-wavetype="sine" data-position="top" class="sine indv-type">Sine</div>
+			<div data-wavetype="square" data-position="middle" class="square indv-type">Square</div>
+			<div data-wavetype="sawtooth" data-position="bottom" class="saw indv-type">Saw</div>
+		</div>
+		<!-- <div class="name">GROUP7-WAVE</div> -->
+		<span id="midi_device_label" class="name">No MIDI Input Device</span>
+		<label class="label">Volume -/+</label>
+		<div class="volume">
+			<input type="range" value="100" class="slider" />
+		</div>
+		<div id="notes"><span id="notes_span">Press "ENTER" to start</span></div>
+		<div id="time_box"><span id="time_span">0.00</span> seconds</div>
+		<div id="score_box"><span id="score_span">0</span> scores</div>
+	</div>
+	<div class="bottom" id="gameOverOrNot">
+		<div class="keys"></div>
+		<div class="octave-switch">
+			<label class="label">Octave Modifier</label>
+			<div data-octave="down" class="down octave-key">
+				<</div>
+					<div data-octave="up" class="up octave-key">></div>
+			</div>
+<!-- 			<div id="gameover" class="gameover"
+				style="background-color: rgba(0, 0, 0, 0.5);">
+				<p>Time cost</p><span>0 seconds</span><a href="javascript:restartgame();"
+					id="restartgamebutton">Restart</a>
+			</div> -->
+		</div>
+	</div>
+	<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="script/MIDI_core.js"></script>
+	<script src="script/game_core.js"></script>
+	<script src="script/MIDI_bridge.js"></script>
+	<script src="script/game_bridge.js"></script>
