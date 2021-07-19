@@ -138,7 +138,8 @@ function makeDistortionCurve(amount) {
 
 
 // make and remove the key pressed
-var pressIndex = [0,0,0,0,0,0,0,0,0,0,0,0];
+var pressIndex = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 function addPressed(key) {
 	var i = 0,
 		ii;
@@ -146,12 +147,13 @@ function addPressed(key) {
 
 	for (ii = keys.length; i < ii; i++) {
 		if (keys[i].getAttribute("data-keycode") == key) {
-			if(pressIndex[i] == 0)
-			keys[i].classList.add("pressed");
+			if (pressIndex[i] == 0)
+				keys[i].classList.add("pressed");
 			pressIndex[i]++;
 		}
 	}
 }
+
 function removePressed(key) {
 	var i = 0,
 		ii;
@@ -160,8 +162,8 @@ function removePressed(key) {
 	for (ii = keys.length; i < ii; i++) {
 		if (keys[i].getAttribute("data-keycode") == key) {
 			pressIndex[i]--;
-			if(pressIndex[i] == 0)
-			keys[i].classList.remove("pressed");
+			if (pressIndex[i] == 0)
+				keys[i].classList.remove("pressed");
 		}
 	}
 }
@@ -194,23 +196,30 @@ function stopOsc(osc) {
 function playNote(e) {
 	//In order to compatible with IE
 	var key = e.which;
-	
+
 	var keyNote = keyNotes[key];
 
 	var note = notes[keyNote + getOctave()];
 	// console.log("Number:",e);
 	// console.log("keyNote(Before):",keyNote);
 	// console.log("keyNote+Octave(Before):",keyNote + getOctave());
-	if(key==13&&gameStart==0)//enter(13) or space(32)
+	if (key == 13 && gameStart == 0) //enter(13) or space(32)
 	{
 		clearText();
 		init();
+	}
+	if (gameStart == 1) {
+		for (var ii in index_notes) {
+			if (keyNote == index_notes[ii]) {
+				onGameInput(144, parseInt(ii)+8, 90);
+			}
+		}
 	}
 	var octave;
 
 	if (keyNote && note && !activeNotes[keyNote]) {
 		e.preventDefault();
-		activeNotes[keyNote] = newOsc(note);//make sound in newOcs(note)
+		activeNotes[keyNote] = newOsc(note); //make sound in newOcs(note)
 		addPressed(key);
 	} else if (key === 190 || key === 188) {
 		octave = key === 188 ? "down" : "up";
@@ -243,7 +252,7 @@ function stopNote(e) {
 
 	if (keyNote && note && activeNotes[keyNote]) {
 		e.preventDefault();
-		activeNotes[keyNote] = stopOsc(activeNotes[keyNote]);//stop sound in stopOcs(note)
+		activeNotes[keyNote] = stopOsc(activeNotes[keyNote]); //stop sound in stopOcs(note)
 		removePressed(key);
 	}
 }
@@ -304,85 +313,120 @@ window.onkeyup = stopNote;
  * Access of MIDI
  * Information of keys group 
  */
-const groupInfo = [
-    {index: 1, minKey: 1, maxKey: 3},
-    {index: 2, minKey: 4, maxKey: 15},
-    {index: 3, minKey: 16, maxKey: 27},
-    {index: 4, minKey: 28, maxKey: 39},
-    {index: 5, minKey: 40, maxKey: 51},
-    {index: 6, minKey: 52, maxKey: 63},
-    {index: 7, minKey: 64, maxKey: 75},
-    {index: 8, minKey: 76, maxKey: 87},
-    {index: 9, minKey: 88, maxKey: 88},
+const groupInfo = [{
+		index: 1,
+		minKey: 1,
+		maxKey: 3
+	},
+	{
+		index: 2,
+		minKey: 4,
+		maxKey: 15
+	},
+	{
+		index: 3,
+		minKey: 16,
+		maxKey: 27
+	},
+	{
+		index: 4,
+		minKey: 28,
+		maxKey: 39
+	},
+	{
+		index: 5,
+		minKey: 40,
+		maxKey: 51
+	},
+	{
+		index: 6,
+		minKey: 52,
+		maxKey: 63
+	},
+	{
+		index: 7,
+		minKey: 64,
+		maxKey: 75
+	},
+	{
+		index: 8,
+		minKey: 76,
+		maxKey: 87
+	},
+	{
+		index: 9,
+		minKey: 88,
+		maxKey: 88
+	},
 ];
 
 
 function getKeyInGroupIndex(index, group) {
-    let x = 0;
-    for(let i = group.minKey; i <= group.maxKey; i++){
-        if(i == index){
-            return x;
-        }
-        x++;
-    }
+	let x = 0;
+	for (let i = group.minKey; i <= group.maxKey; i++) {
+		if (i == index) {
+			return x;
+		}
+		x++;
+	}
 }
 
 
-function getKeyboardGroup(index){
-    for(let i = 0; i < groupInfo.length; i++){
-        let group = groupInfo[i]
-        if(index <= group.maxKey && index >= group.minKey){
-            return {
-                key:index,
-                groupIndex:group.index,
-                keyInGroupIndex:getKeyInGroupIndex(index, group),
-                minKey:group.minKey,
-                maxKey:group.maxKey
-            }
-        }
-    }
+function getKeyboardGroup(index) {
+	for (let i = 0; i < groupInfo.length; i++) {
+		let group = groupInfo[i]
+		if (index <= group.maxKey && index >= group.minKey) {
+			return {
+				key: index,
+				groupIndex: group.index,
+				keyInGroupIndex: getKeyInGroupIndex(index, group),
+				minKey: group.minKey,
+				maxKey: group.maxKey
+			}
+		}
+	}
 }
 
-function getKeyName(keyNumber, group){
+function getKeyName(keyNumber, group) {
 	keyPosition = keyNumber - group.minKey;
 	// console.log("keyPosition",keyPosition);
 	// console.log("keyNumber",keyNumber);
 	// console.log("group.minkey",group.minKey);
-	if(keyPosition == 0){
-		return "90";//C
+	if (keyPosition == 0) {
+		return "90"; //C
 	}
-	if(keyPosition == 1){
-		return "83";//C#
+	if (keyPosition == 1) {
+		return "83"; //C#
 	}
-	if(keyPosition == 2){
-		return "88";//D
+	if (keyPosition == 2) {
+		return "88"; //D
 	}
-	if(keyPosition == 3){
-		return "68";//D#
+	if (keyPosition == 3) {
+		return "68"; //D#
 	}
-	if(keyPosition == 4){
-		return "67";//E
+	if (keyPosition == 4) {
+		return "67"; //E
 	}
-	if(keyPosition == 5){
-		return "86";//F
+	if (keyPosition == 5) {
+		return "86"; //F
 	}
-	if(keyPosition == 6){
-		return "71";//F#
+	if (keyPosition == 6) {
+		return "71"; //F#
 	}
-	if(keyPosition == 7){
-		return "66";//G
+	if (keyPosition == 7) {
+		return "66"; //G
 	}
-	if(keyPosition == 8){
-		return "72";//G#
+	if (keyPosition == 8) {
+		return "72"; //G#
 	}
-	if(keyPosition == 9){
-		return "78";//A
+	if (keyPosition == 9) {
+		return "78"; //A
 	}
-	if(keyPosition == 10){
-		return "74";//A#
+	if (keyPosition == 10) {
+		return "74"; //A#
 	}
-	if(keyPosition ==11){
-		return "77";//B
+	if (keyPosition == 11) {
+		return "77"; //B
 	}
 }
 
@@ -399,7 +443,7 @@ function buildKeyboard() {
 	var keys = ["90", "83", "88", "68", "67", "86", "71", "66", "72", "78", "74", "77"];
 
 	var letters = ["Z", "S", "X", "D", "C", "V", "G", "B", "H", "N", "J", "M"];
-	
+
 	for (var i = 0, ii = keys.length; i < ii; i++) {
 		var key = document.createElement("div");
 
@@ -426,17 +470,17 @@ function buildKeyboard() {
 
 			stopNote(fakeEvent);
 		});
-		
+
 		key.addEventListener("mouseleave", function(e) {
 			var fakeEvent = {
 				which: this.getAttribute("data-keycode"),
 				preventDefault: function() {}
 			};
-		
+
 			stopNote(fakeEvent);
 		});
 	}
-	
+
 	// change selector of cavas waveform
 	canvas = document.getElementsByClassName("waveform")[0];
 	canvasCtx = canvas.getContext("2d");
@@ -457,28 +501,28 @@ function buildKeyboard() {
 	volume.addEventListener("change", function(e) {
 		gain.gain.value = this.value / 100;
 	});
-	
+
 	// Octave Modifier
 	var octaveSwitch = document.getElementsByClassName("octave-switch")[0];
 	octaveKeys = octaveSwitch.getElementsByClassName("octave-key");
-		octaveKeys[0].addEventListener("mousedown", function(e) {
-			var octave = this.getAttribute("data-octave");
-			octaveKeys[1].classList.remove("pressed");
-			this.classList.toggle("pressed");
-			toggleOctave(octave);
-		});
-		octaveKeys[1].addEventListener("mousedown", function(e) {
-			var octave = this.getAttribute("data-octave");
-			octaveKeys[0].classList.remove("pressed");
-			this.classList.toggle("pressed");
-			toggleOctave(octave);
-		});
+	octaveKeys[0].addEventListener("mousedown", function(e) {
+		var octave = this.getAttribute("data-octave");
+		octaveKeys[1].classList.remove("pressed");
+		this.classList.toggle("pressed");
+		toggleOctave(octave);
+	});
+	octaveKeys[1].addEventListener("mousedown", function(e) {
+		var octave = this.getAttribute("data-octave");
+		octaveKeys[0].classList.remove("pressed");
+		this.classList.toggle("pressed");
+		toggleOctave(octave);
+	});
 
-		// octaveKeys[i].addEventListener("mouseup", function(e) {
-		// 	var octave = this.getAttribute("data-octave");
-		// 	this.classList.remove("pressed");
-		// 	toggleOctave(octave);
-		// });
+	// octaveKeys[i].addEventListener("mouseup", function(e) {
+	// 	var octave = this.getAttribute("data-octave");
+	// 	this.classList.remove("pressed");
+	// 	toggleOctave(octave);
+	// });
 
 	keyboard.classList.remove("hidden");
 }

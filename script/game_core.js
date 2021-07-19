@@ -1,6 +1,7 @@
 var board = new Array();
 var current_array = new Array();
 var tryTimes = 10;
+var mistakeTimes = 60;
 var timerun = 0.00;
 var score = 0;
 var gameStart = 0;//0 means not start
@@ -40,7 +41,7 @@ var index_notes = {
 
 function init() {
 	timeBegin();
-	tryTimes = 10;
+	mistakeTimes = 60;
 	score = 0;
 	gameStart=1;
 	createRandChords();
