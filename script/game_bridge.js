@@ -106,7 +106,7 @@ function gameOver() {
 
 function restartgame() {
 	$("#gameover").remove();
-	$("#time_box").html("<span id='time_span'>0.00</span>" + "seconds");
+	$("#time_box").html("<span id='time_span'>0.00</span>" + " seconds");
 	$("#notes_span").text("");
 	writeText();
 	// re initialize
