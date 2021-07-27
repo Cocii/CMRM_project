@@ -188,31 +188,45 @@ body {
 	width: 11vw;
 	height: 10vw;
 	font-size: 2vw;
-	color: #00ffcc;
-	font-weight:bold;
+	color: #000000;
 	text-align: center;
+}
+.keyboard>.top #notes_span{
+	font-weight:bold;
+	font-size: 2.2vw;
+	color: #00ffcc;
+	text-align: center;
+	/* line-height: 3vw; */
 }
 .keyboard>.top #time_box{
 	position: absolute;
 	top: 12vw;
 	right: 1vw;
 	width: 15vw;
-	height: 5vw;
-	/* background: #2f2f2f; */
+	height: 4vw;
 	font-size: 2vw;
-	color: #00ffcc;
+	color: #000000;
 	text-align: center;
+	line-height: 4vw;
+	background: #4f4f4f;
+}
+.keyboard>.top #time_span{
+	color: #00ffcc;
 }
 .keyboard>.top #score_box{
 	position: absolute;
 	top: 12vw;
 	right: 16vw;
 	width: 12vw;
-	height: 5vw;
-	/* background: #2f2f2f; */
+	height: 4vw;
 	font-size: 2vw;
-	color: #00ffcc;
+	color: #000000;
 	text-align: center;
+	line-height: 4vw;
+	background: #4f4f4f;
+}
+.keyboard>.top #score_span{
+	color: #00ffcc;
 }
 .keyboard>.top .volume input[type="range"]::-webkit-slider-thumb {
 	background: #00ffcc;
